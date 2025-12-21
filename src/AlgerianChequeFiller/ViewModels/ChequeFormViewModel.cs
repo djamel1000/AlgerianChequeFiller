@@ -27,7 +27,7 @@ public class ChequeFormViewModel : ViewModelBase
         _printService = new PrintService();
         Template = _templateStore.LoadDefaultTemplate();
 
-        PrintCommand = new RelayCommand(ExecutePrint, CanPrint);
+        PrintCommand = new RelayCommand(_ => ExecutePrint(), _ => CanPrint());
         TestPrintCommand = new RelayCommand(ExecuteTestPrint);
 
         UpdateAmountInWords();
