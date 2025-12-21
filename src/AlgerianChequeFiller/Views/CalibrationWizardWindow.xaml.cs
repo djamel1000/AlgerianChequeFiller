@@ -41,7 +41,7 @@ public partial class CalibrationWizardWindow : Window
             Beneficiary = "EXEMPLE DE BENEFICIAIRE",
             Place = "Alger",
             Date = DateTime.Today,
-            Language = System.Windows.Markup.XmlLanguage.GetLanguage("fr-FR");
+            Language = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
         };
 
         _printService.Print(testData, _template, testMode: true);
