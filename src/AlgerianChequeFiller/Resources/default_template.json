@@ -1,0 +1,62 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+  "templateName": "Algerian Cheque – Default",
+  "chequeSizeMm": {
+    "width": 160.0,
+    "height": 80.0
+  },
+  "globalOffsetMm": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "fields": {
+    "AmountNumeric": {
+      "x": 140.0,
+      "y": 8.0,
+      "w": 32.0,
+      "h": 8.0,
+      "alignment": "Right"
+    },
+    "AmountWordsL1": {
+      "x": 50.0,
+      "y": 20.0,
+      "w": 120.0,
+      "h": 7.0,
+      "alignment": "Left"
+    },
+    "Beneficiary": {
+      "x": 38.0,
+      "y": 30.0,
+      "w": 130.0,
+      "h": 8.0,
+      "alignment": "Left"
+    },
+    "AmountWordsL2": {
+      "x": 10.0,
+      "y": 38.0,
+      "w": 80.0,
+      "h": 7.0,
+      "alignment": "Left"
+    },
+    "Place": {
+      "x": 100.0,
+      "y": 50.0,
+      "w": 35.0,
+      "h": 7.0,
+      "alignment": "Left"
+    },
+    "Date": {
+      "x": 140.0,
+      "y": 50.0,
+      "w": 32.0,
+      "h": 7.0,
+      "alignment": "Left"
+    }
+  },
+  "fonts": {
+    "latinFamily": "Arial",
+    "arabicFamily": "Traditional Arabic",
+    "minSize": 8.0,
+    "maxSize": 12.0
+  }
+}
