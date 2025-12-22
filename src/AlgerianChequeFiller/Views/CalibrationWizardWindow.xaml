@@ -1,99 +1,211 @@
 <Window x:Class="AlgerianChequeFiller.Views.CalibrationWizardWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Assistant de Calibration - Algerian Cheque Filler"
-        Width="650" Height="550"
-        WindowStartupLocation="CenterOwner"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Assistant de Calibration - Cheque Filler"
+        Height="500" Width="600"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="{StaticResource BackgroundBrush}">
+        Background="#F8FAFC">
 
-    <Grid Margin="32">
+    <Window.Resources>
+        <!-- Button Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#3B82F6"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#E2E8F0"/>
+            <Setter Property="Foreground" Value="#334155"/>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#EF4444"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- TextBox Style -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Label Style -->
+        <Style x:Key="FormLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="30">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0">
-            <TextBlock Text="🎯 Assistant de Calibration"
-                       FontSize="24" FontWeight="Bold"
-                       Foreground="{StaticResource TextPrimaryBrush}"/>
-            <TextBlock Text="Ajustez le décalage X/Y pour un alignement parfait"
-                       FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"
+        <StackPanel Grid.Row="0" Margin="0,0,0,30">
+            <TextBlock Text="🎯 Assistant de Calibration d'Imprimante"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="#0F172A"/>
+            <TextBlock Text="Ajustez les décalages pour un alignement parfait de votre imprimante"
+                       FontSize="13"
+                       Foreground="#64748B"
                        Margin="0,8,0,0"/>
         </StackPanel>
 
-        <!-- Content -->
-        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,24,0,24">
-            <StackPanel>
-                <!-- Step 1 -->
-                <TextBlock Text="Étape 1: Imprimez la page de test"
-                           FontSize="16" FontWeight="SemiBold"
-                           Foreground="{StaticResource TextPrimaryBrush}"/>
-                <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="22"
-                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,16">
-                    Imprimez le test d'alignement sur une feuille blanche. Les rectangles montrent les zones des champs.
-                </TextBlock>
+        <!-- Offset Controls -->
+        <Border Grid.Row="1" 
+                Background="White" 
+                CornerRadius="12" 
+                Padding="24"
+                BorderBrush="#E2E8F0"
+                BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <Button x:Name="PrintTestButton" Content="🖨️ Imprimer Page de Test"
-                        Style="{StaticResource SecondaryButton}"
-                        Click="OnPrintTestClick" Width="240" HorizontalAlignment="Left"
-                        Margin="0,0,0,24"/>
+                <!-- X Offset -->
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <TextBlock Text="Décalage Horizontal (X)" 
+                               Style="{StaticResource FormLabel}"/>
+                    <TextBox x:Name="OffsetXTextBox"
+                             Style="{StaticResource ModernTextBox}"
+                             Text="0.0"/>
+                    <TextBlock Text="mm" 
+                               FontSize="11" 
+                               Foreground="#64748B"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
 
-                <!-- Step 2 -->
-                <TextBlock Text="Étape 2: Mesurez le décalage"
-                           FontSize="16" FontWeight="SemiBold"
-                           Foreground="{StaticResource TextPrimaryBrush}"/>
-                <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="22"
-                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,16">
-                    Comparez l'impression avec un vrai chèque. Mesurez le décalage en millimètres.
-                </TextBlock>
+                <!-- Y Offset -->
+                <StackPanel Grid.Row="0" Grid.Column="2">
+                    <TextBlock Text="Décalage Vertical (Y)" 
+                               Style="{StaticResource FormLabel}"/>
+                    <TextBox x:Name="OffsetYTextBox"
+                             Style="{StaticResource ModernTextBox}"
+                             Text="0.0"/>
+                    <TextBlock Text="mm" 
+                               FontSize="11" 
+                               Foreground="#64748B"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
 
-                <!-- Offset Inputs -->
-                <Grid Margin="0,0,0,24">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Décalage X (mm)" Style="{StaticResource FormLabel}"/>
-                        <TextBox x:Name="OffsetXTextBox" Text="0"
-                                 Style="{StaticResource InputTextBox}"/>
-                        <TextBlock Text="+ vers la droite, - vers la gauche"
-                                   FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"
-                                   Margin="0,4,0,0"/>
+                <!-- Help Text -->
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                        Background="#EFF6FF"
+                        CornerRadius="8"
+                        Padding="16"
+                        Margin="0,20,0,0">
+                    <StackPanel>
+                        <TextBlock Text="💡 Conseils d'utilisation:"
+                                   FontWeight="SemiBold"
+                                   FontSize="13"
+                                   Foreground="#1E40AF"
+                                   Margin="0,0,0,8"/>
+                        <TextBlock TextWrapping="Wrap"
+                                   FontSize="12"
+                                   LineHeight="20"
+                                   Foreground="#1E40AF">
+                            <Run Text="• Utilisez des valeurs positives pour déplacer vers la droite/bas"/>
+                            <LineBreak/>
+                            <Run Text="• Utilisez des valeurs négatives pour déplacer vers la gauche/haut"/>
+                            <LineBreak/>
+                            <Run Text="• Commencez avec de petites valeurs (0.5 - 2.0 mm)"/>
+                            <LineBreak/>
+                            <Run Text="• Imprimez un test après chaque ajustement"/>
+                        </TextBlock>
                     </StackPanel>
-
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Décalage Y (mm)" Style="{StaticResource FormLabel}"/>
-                        <TextBox x:Name="OffsetYTextBox" Text="0"
-                                 Style="{StaticResource InputTextBox}"/>
-                        <TextBlock Text="+ vers le bas, - vers le haut"
-                                   FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"
-                                   Margin="0,4,0,0"/>
-                    </StackPanel>
-                </Grid>
-
-                <!-- Step 3 -->
-                <TextBlock Text="Étape 3: Vérifiez l'alignement"
-                           FontSize="16" FontWeight="SemiBold"
-                           Foreground="{StaticResource TextPrimaryBrush}"/>
-                <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="22"
-                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,0">
-                    Appliquez le décalage et imprimez à nouveau pour vérifier.
-                </TextBlock>
-            </StackPanel>
+                </Border>
+            </Grid>
         </Border>
 
-        <!-- Buttons -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Annuler" Style="{StaticResource SecondaryButton}"
-                    Click="OnCancelClick" Width="120" Margin="0,0,12,0"/>
-            <Button Content="Appliquer" Style="{StaticResource PrimaryButton}"
-                    Click="OnApplyClick" Width="150"/>
-        </StackPanel>
+        <!-- Test Print Button -->
+        <Button Grid.Row="3"
+                Content="🖨️ Imprimer un Test d'Alignement"
+                Style="{StaticResource SecondaryButton}"
+                Click="OnPrintTestClick"
+                VerticalAlignment="Center"
+                Margin="0,20,0,0"
+                Padding="24,14"/>
+
+        <!-- Action Buttons -->
+        <Grid Grid.Row="4" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="❌ Annuler"
+                    Style="{StaticResource SecondaryButton}"
+                    Click="OnCancelClick"/>
+
+            <Button Grid.Column="2"
+                    Content="✅ Appliquer les Décalages"
+                    Style="{StaticResource PrimaryButton}"
+                    Click="OnApplyClick"/>
+        </Grid>
     </Grid>
 </Window>
