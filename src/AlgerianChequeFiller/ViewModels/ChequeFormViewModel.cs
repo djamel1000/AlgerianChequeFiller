@@ -28,7 +28,7 @@ public class ChequeFormViewModel : ViewModelBase
         Template = _templateStore.LoadDefaultTemplate();
 
         PrintCommand = new RelayCommand(_ => ExecutePrint(), _ => CanPrint());
-        TestPrintCommand = new RelayCommand(ExecuteTestPrint);
+        TestPrintCommand = new RelayCommand(_ => ExecuteTestPrint());
 
         UpdateAmountInWords();
         UpdatePreview();
@@ -172,7 +172,7 @@ public class ChequeFormViewModel : ViewModelBase
         PreviewImage = new DrawingImage(drawingGroup);
     }
 
-    private bool CanPrint(object? parameter)
+    private bool CanPrint()
     {
         return Amount > 0 && !string.IsNullOrWhiteSpace(Beneficiary);
     }

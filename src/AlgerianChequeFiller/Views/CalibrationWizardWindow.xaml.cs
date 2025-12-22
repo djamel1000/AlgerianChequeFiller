@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using AlgerianChequeFiller.Models;
 using AlgerianChequeFiller.Services;
+using ChequeLanguage = AlgerianChequeFiller.Models.Language;
 
 namespace AlgerianChequeFiller.Views
 {
@@ -109,10 +110,10 @@ namespace AlgerianChequeFiller.Views
 
             var language = uiLang switch
             {
-                "fr" => Language.French,
-                "ar" => Language.Arabic,
-                "en" => Language.English,
-                _ => Language.French // Default to French
+                "fr" => ChequeLanguage.French,
+                "ar" => ChequeLanguage.Arabic,
+                "en" => ChequeLanguage.English,
+                _ => ChequeLanguage.French // Default to French
             };
 
             return new ChequeData
@@ -120,16 +121,16 @@ namespace AlgerianChequeFiller.Views
                 Amount = 1234.56m,
                 Beneficiary = language switch
                 {
-                    Language.French => "EXEMPLE DE BÉNÉFICIAIRE",
-                    Language.Arabic => "مثال على المستفيد",
-                    Language.English => "SAMPLE BENEFICIARY",
+                    ChequeLanguage.French => "EXEMPLE DE BÉNÉFICIAIRE",
+                    ChequeLanguage.Arabic => "مثال على المستفيد",
+                    ChequeLanguage.English => "SAMPLE BENEFICIARY",
                     _ => "EXEMPLE DE BÉNÉFICIAIRE"
                 },
                 Place = language switch
                 {
-                    Language.French => "Alger",
-                    Language.Arabic => "الجزائر",
-                    Language.English => "Algiers",
+                    ChequeLanguage.French => "Alger",
+                    ChequeLanguage.Arabic => "الجزائر",
+                    ChequeLanguage.English => "Algiers",
                     _ => "Alger"
                 },
                 Date = DateTime.Today,
