@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
     <Company>Algerian Cheque Filler</Company>
     <Product>Algerian Cheque Filler</Product>
     <Description>Desktop application for printing user-entered data onto pre-printed Algerian cheques</Description>
