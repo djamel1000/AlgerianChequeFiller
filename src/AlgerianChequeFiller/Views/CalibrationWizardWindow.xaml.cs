@@ -43,7 +43,12 @@ public partial class CalibrationWizardWindow : Window
             Beneficiary = "EXEMPLE DE BENEFICIAIRE",
             Place = "Alger",
             Date = DateTime.Today,
-            Language = Language.French;
+            Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+            {
+                "fr" => AlgerianChequeFiller.Models.Language.French,
+                "ar" => AlgerianChequeFiller.Models.Language.Arabic,
+                _    => AlgerianChequeFiller.Models.Language.English,
+            }
         };
 
         _printService.Print(testData, _template, testMode: true);
