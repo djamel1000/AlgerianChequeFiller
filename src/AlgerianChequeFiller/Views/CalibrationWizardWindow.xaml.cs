@@ -1,9 +1,9 @@
+using System;
+using System.Globalization;
 using System.Windows;
 using AlgerianChequeFiller.Models;
 using AlgerianChequeFiller.Services;
-using System.Globalization;
-using System.Windows.Markup;
-using AlgerianChequeFiller.Models;
+
 namespace AlgerianChequeFiller.Views;
 
 /// <summary>
@@ -20,22 +20,25 @@ public partial class CalibrationWizardWindow : Window
     public CalibrationWizardWindow(ChequeTemplate template)
     {
         InitializeComponent();
-        _template = template;
+
+        _template = template ?? throw new ArgumentNullException(nameof(template));
         _printService = new PrintService();
 
         // Initialize with current offsets
-        OffsetXTextBox.Text = template.GlobalOffsetMm.X.ToString("F1");
-        OffsetYTextBox.Text = template.GlobalOffsetMm.Y.ToString("F1");
+        OffsetXTextBox.Text = _template.GlobalOffsetMm.X.ToString("F1", CultureInfo.InvariantCulture);
+        OffsetYTextBox.Text = _template.GlobalOffsetMm.Y.ToString("F1", CultureInfo.InvariantCulture);
     }
 
     private void OnPrintTestClick(object sender, RoutedEventArgs e)
     {
         // Apply current offset values for test print
-        if (double.TryParse(OffsetXTextBox.Text, out var x) &&
-            double.TryParse(OffsetYTextBox.Text, out var y))
+        if (double.TryParse(OffsetXTextBox.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var x) &&
+            double.TryParse(OffsetYTextBox.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
         {
             _template.GlobalOffsetMm = new PointMm(x, y);
         }
+
+        var uiLang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 
         var testData = new ChequeData
         {
@@ -43,11 +46,11 @@ public partial class CalibrationWizardWindow : Window
             Beneficiary = "EXEMPLE DE BENEFICIAIRE",
             Place = "Alger",
             Date = DateTime.Today,
-            Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+            Language = uiLang switch
             {
-                "fr" => AlgerianChequeFiller.Models.Language.French,
-                "ar" => AlgerianChequeFiller.Models.Language.Arabic,
-                _    => AlgerianChequeFiller.Models.Language.English,
+                "fr" => Language.French,
+                "ar" => Language.Arabic,
+                _ => Language.English,
             }
         };
 
@@ -56,19 +59,22 @@ public partial class CalibrationWizardWindow : Window
 
     private void OnApplyClick(object sender, RoutedEventArgs e)
     {
-        if (double.TryParse(OffsetXTextBox.Text, out var x) &&
-            double.TryParse(OffsetYTextBox.Text, out var y))
+        if (double.TryParse(OffsetXTextBox.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var x) &&
+            double.TryParse(OffsetYTextBox.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
         {
             OffsetX = x;
             OffsetY = y;
             DialogResult = true;
             Close();
+            return;
         }
-        else
-        {
-            MessageBox.Show("Veuillez entrer des valeurs numériques valides.",
-                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
+
+        MessageBox.Show(
+            "Veuillez entrer des valeurs numériques valides.",
+            "Erreur",
+            MessageBoxButton.OK,
+            MessageBoxImage.Warning
+        );
     }
 
     private void OnCancelClick(object sender, RoutedEventArgs e)
