@@ -3,6 +3,7 @@ using AlgerianChequeFiller.Models;
 using AlgerianChequeFiller.Services;
 using System.Globalization;
 using System.Windows.Markup;
+using AlgerianChequeFiller.Models;
 namespace AlgerianChequeFiller.Views;
 
 /// <summary>
@@ -42,7 +43,7 @@ public partial class CalibrationWizardWindow : Window
             Beneficiary = "EXEMPLE DE BENEFICIAIRE",
             Place = "Alger",
             Date = DateTime.Today,
-            Language = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag)
+            Language = Language.French;
         };
 
         _printService.Print(testData, _template, testMode: true);
