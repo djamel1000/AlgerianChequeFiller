@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Windows;
-using System.Windows.Markup;
 using AlgerianChequeFiller.Models;
 using AlgerianChequeFiller.Services;
 
@@ -28,33 +27,6 @@ namespace AlgerianChequeFiller.Views
             // Initialize with current offsets
             OffsetXTextBox.Text = _template.GlobalOffsetMm.X.ToString("F1", CultureInfo.InvariantCulture);
             OffsetYTextBox.Text = _template.GlobalOffsetMm.Y.ToString("F1", CultureInfo.InvariantCulture);
-
-            // Set the language for the window based on current culture
-            SetWindowLanguage();
-        }
-
-        /// <summary>
-        /// Sets the appropriate language for the window content based on current UI culture.
-        /// </summary>
-        private void SetWindowLanguage()
-        {
-            var cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            
-            try
-            {
-                this.Language = cultureName switch
-                {
-                    "fr" => XmlLanguage.GetLanguage("fr-FR"),
-                    "ar" => XmlLanguage.GetLanguage("ar-DZ"),
-                    "en" => XmlLanguage.GetLanguage("en-US"),
-                    _ => XmlLanguage.GetLanguage("fr-FR") // Default to French for Algeria
-                };
-            }
-            catch (ArgumentException)
-            {
-                // If the language is not supported, fall back to French
-                this.Language = XmlLanguage.GetLanguage("fr-FR");
-            }
         }
 
         /// <summary>
