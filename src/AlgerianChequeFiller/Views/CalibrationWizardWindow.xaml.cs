@@ -1,7 +1,8 @@
 using System.Windows;
 using AlgerianChequeFiller.Models;
 using AlgerianChequeFiller.Services;
-
+using System.Globalization;
+using System.Windows.Markup;
 namespace AlgerianChequeFiller.Views;
 
 /// <summary>
