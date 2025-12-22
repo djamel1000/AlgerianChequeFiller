@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using AlgerianChequeFiller.Services;
 using AlgerianChequeFiller.Views;
@@ -13,21 +14,64 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        var templateStore = new TemplateStore();
+        // Add global exception handling
+        AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+        DispatcherUnhandledException += OnDispatcherUnhandledException;
 
-        // Show disclaimer on first launch
-        if (!templateStore.IsDisclaimerAccepted())
+        try
         {
-            var disclaimer = new DisclaimerWindow();
-            var result = disclaimer.ShowDialog();
+            var templateStore = new TemplateStore();
 
-            if (result != true)
+            // Show disclaimer on first launch
+            if (!templateStore.IsDisclaimerAccepted())
             {
-                Shutdown();
-                return;
+                var disclaimer = new DisclaimerWindow();
+                var result = disclaimer.ShowDialog();
+
+                if (result != true)
+                {
+                    Shutdown();
+                    return;
+                }
+
+                templateStore.AcceptDisclaimer();
             }
 
-            templateStore.AcceptDisclaimer();
+            // Create and show main window
+            var mainWindow = new MainWindow();
+            MainWindow = mainWindow;
+            mainWindow.Show();
         }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Erreur au démarrage de l'application:\n\n{ex.Message}\n\n{ex.StackTrace}",
+                "Erreur de Démarrage",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            Shutdown();
+        }
+    }
+
+    private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        if (e.ExceptionObject is Exception ex)
+        {
+            MessageBox.Show(
+                $"Erreur non gérée:\n\n{ex.Message}",
+                "Erreur",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    {
+        MessageBox.Show(
+            $"Erreur:\n\n{e.Exception.Message}",
+            "Erreur",
+            MessageBoxButton.OK,
+            MessageBoxImage.Error);
+        e.Handled = true;
     }
 }
