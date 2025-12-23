@@ -41,8 +41,23 @@ public partial class TemplateEditorWindow : Window
 
         _viewModel = (TemplateEditorViewModel)DataContext;
         _viewModel.TemplateChanged += OnTemplateChanged;
+        _viewModel.SaveRequested += OnSaveRequested;
 
         Loaded += OnLoaded;
+    }
+
+    private void OnSaveRequested(object? sender, EventArgs e)
+    {
+        var currentName = _viewModel.Template.TemplateName ?? "Mon Modèle";
+        var dialog = new SaveTemplateDialog(currentName);
+        dialog.Owner = this;
+
+        if (dialog.ShowDialog() == true)
+        {
+            _viewModel.SaveWithName(dialog.TemplateName);
+            MessageBox.Show($"Modèle '{dialog.TemplateName}' enregistré avec succès!", 
+                "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)

@@ -112,6 +112,7 @@ public class TemplateEditorViewModel : ViewModelBase
     public RelayCommand ResetCommand { get; }
 
     public event EventHandler? TemplateChanged;
+    public event EventHandler? SaveRequested;
 
     private void LoadSelectedFieldProperties()
     {
@@ -185,7 +186,12 @@ public class TemplateEditorViewModel : ViewModelBase
 
     private void Save()
     {
-        _templateStore.SaveTemplate(_template);
+        SaveRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void SaveWithName(string templateName)
+    {
+        _templateStore.SaveTemplate(_template, templateName);
     }
 
     private void Reset()

@@ -29,7 +29,14 @@
                                Foreground="{StaticResource TextPrimaryBrush}"/>
                     <TextBlock Text="Impression précise de chèques algériens"
                                FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
-                               Margin="0,4,0,32"/>
+                               Margin="0,4,0,16"/>
+
+                    <!-- Template Selector -->
+                    <TextBlock Text="Modèle" Style="{StaticResource FormLabel}"/>
+                    <ComboBox x:Name="TemplateSelector"
+                              FontSize="14" Padding="10,8"
+                              SelectionChanged="OnTemplateSelectionChanged"
+                              Margin="0,0,0,20"/>
 
                     <!-- Amount -->
                     <TextBlock Text="Montant (DA)" Style="{StaticResource FormLabel}"/>
@@ -129,14 +136,16 @@
             <Border Grid.Row="1" Margin="32">
                 <Border Style="{StaticResource Card}">
                     <Viewbox Stretch="Uniform" MaxWidth="800">
-                        <!-- Cheque Preview -->
-                        <Border BorderBrush="{StaticResource BorderBrush}"
-                                BorderThickness="1" CornerRadius="4"
-                                Background="White">
+                        <!-- Cheque Preview with Background -->
+                        <Grid Width="604" Height="302">
+                            <!-- Background Image -->
+                            <Image x:Name="PreviewBackground"
+                                   Source="Resources/cheque_background.png"
+                                   Stretch="Fill"/>
+                            <!-- Data Overlay -->
                             <Image Source="{Binding PreviewImage}"
-                                   Width="604" Height="302"
                                    RenderOptions.BitmapScalingMode="HighQuality"/>
-                        </Border>
+                        </Grid>
                     </Viewbox>
                 </Border>
             </Border>

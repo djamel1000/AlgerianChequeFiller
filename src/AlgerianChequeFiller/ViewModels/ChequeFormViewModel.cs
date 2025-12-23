@@ -194,4 +194,11 @@ public class ChequeFormViewModel : ViewModelBase
         UpdateAmountInWords();
         UpdatePreview();
     }
+
+    public void LoadTemplate(ChequeTemplate template)
+    {
+        Template = template;
+        OnPropertyChanged(nameof(Template));
+        UpdatePreview();
+    }
 }

@@ -11,6 +11,7 @@ namespace AlgerianChequeFiller.Services;
 public class TemplateStore
 {
     private readonly string _appDataPath;
+    private readonly string _templatesPath;
     private readonly JsonSerializerOptions _jsonOptions;
 
     public TemplateStore()
@@ -19,6 +20,8 @@ public class TemplateStore
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "AlgerianChequeFiller");
         
+        _templatesPath = Path.Combine(_appDataPath, "Templates");
+
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -26,6 +29,7 @@ public class TemplateStore
         };
 
         Directory.CreateDirectory(_appDataPath);
+        Directory.CreateDirectory(_templatesPath);
     }
 
     /// <summary>
@@ -56,13 +60,13 @@ public class TemplateStore
     }
 
     /// <summary>
-    /// Load template from user's app data.
+    /// Load template by name from user's app data.
     /// </summary>
-    public ChequeTemplate? LoadTemplate(string templateId)
+    public ChequeTemplate? LoadTemplate(string templateName)
     {
         try
         {
-            var path = Path.Combine(_appDataPath, $"{templateId}.json");
+            var path = GetTemplatePath(templateName);
             if (File.Exists(path))
             {
                 var json = File.ReadAllText(path);
@@ -77,30 +81,71 @@ public class TemplateStore
     }
 
     /// <summary>
-    /// Save template to user's app data.
+    /// Save template to user's app data with a given name.
     /// </summary>
-    public void SaveTemplate(ChequeTemplate template)
+    public void SaveTemplate(ChequeTemplate template, string templateName)
     {
-        var path = Path.Combine(_appDataPath, $"{template.Id}.json");
+        template.TemplateName = templateName;
+        var path = GetTemplatePath(templateName);
         var json = JsonSerializer.Serialize(template, _jsonOptions);
         File.WriteAllText(path, json);
     }
 
     /// <summary>
-    /// Get list of saved template IDs.
+    /// Save template with its current name.
     /// </summary>
-    public List<string> GetSavedTemplateIds()
+    public void SaveTemplate(ChequeTemplate template)
     {
-        var ids = new List<string>();
+        var name = string.IsNullOrEmpty(template.TemplateName) ? "Default" : template.TemplateName;
+        SaveTemplate(template, name);
+    }
+
+    /// <summary>
+    /// Delete a saved template.
+    /// </summary>
+    public void DeleteTemplate(string templateName)
+    {
         try
         {
-            foreach (var file in Directory.GetFiles(_appDataPath, "*.json"))
+            var path = GetTemplatePath(templateName);
+            if (File.Exists(path))
             {
-                ids.Add(Path.GetFileNameWithoutExtension(file));
+                File.Delete(path);
             }
         }
         catch { }
-        return ids;
+    }
+
+    /// <summary>
+    /// Get list of all saved template names.
+    /// </summary>
+    public List<string> GetSavedTemplateNames()
+    {
+        var names = new List<string>();
+        try
+        {
+            foreach (var file in Directory.GetFiles(_templatesPath, "*.json"))
+            {
+                names.Add(Path.GetFileNameWithoutExtension(file));
+            }
+        }
+        catch { }
+        return names;
+    }
+
+    /// <summary>
+    /// Check if a template with the given name exists.
+    /// </summary>
+    public bool TemplateExists(string templateName)
+    {
+        return File.Exists(GetTemplatePath(templateName));
+    }
+
+    private string GetTemplatePath(string templateName)
+    {
+        // Sanitize filename
+        var safeName = string.Join("_", templateName.Split(Path.GetInvalidFileNameChars()));
+        return Path.Combine(_templatesPath, $"{safeName}.json");
     }
 
     /// <summary>
@@ -126,7 +171,7 @@ public class TemplateStore
         return new ChequeTemplate
         {
             Id = "default",
-            TemplateName = "Algerian Cheque – Default",
+            TemplateName = "Default",
             ChequeSizeMm = new SizeMm(160, 80),
             GlobalOffsetMm = new PointMm(0, 0),
             Fields = new Dictionary<string, FieldRect>
