@@ -1,0 +1,257 @@
+<Window x:Class="AlgerianChequeFiller.Views.TemplateEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:AlgerianChequeFiller.ViewModels"
+        xmlns:local="clr-namespace:AlgerianChequeFiller.Converters"
+        mc:Ignorable="d"
+        Title="Éditeur de Modèle - Algerian Cheque Filler"
+        Width="1100" Height="750"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        Background="#F8FAFC">
+
+    <Window.Resources>
+        <!-- Converters -->
+        <local:BoolToVisibilityConverter x:Key="BoolToVisConverter"/>
+        <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisConverter"/>
+        
+        <!-- Button Styles -->
+        <Style x:Key="EditorButton" TargetType="Button">
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryBtn" TargetType="Button" BasedOn="{StaticResource EditorButton}">
+            <Setter Property="Background" Value="#3B82F6"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="SecondaryBtn" TargetType="Button" BasedOn="{StaticResource EditorButton}">
+            <Setter Property="Background" Value="#E2E8F0"/>
+            <Setter Property="Foreground" Value="#334155"/>
+        </Style>
+
+        <!-- TextBox Style -->
+        <Style x:Key="PropTextBox" TargetType="TextBox">
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PropLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <vm:TemplateEditorViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="280"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Canvas Area -->
+        <Grid Grid.Column="0" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                <TextBlock Text="📐 Éditeur de Modèle"
+                           FontSize="22" FontWeight="Bold" Foreground="#0F172A"/>
+                <TextBlock Text="Cliquez sur un champ pour le sélectionner, puis glissez pour le déplacer"
+                           FontSize="13" Foreground="#64748B" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Canvas Container -->
+            <Border Grid.Row="1" Background="White" CornerRadius="12"
+                    BorderBrush="#E2E8F0" BorderThickness="1">
+                <Grid>
+                    <Viewbox Stretch="Uniform" Margin="30">
+                        <Canvas x:Name="TemplateCanvas"
+                                Width="604" Height="302"
+                                Background="#FAFAFA"
+                                ClipToBounds="True">
+                            <!-- Field rectangles will be added programmatically -->
+                        </Canvas>
+                    </Viewbox>
+                    
+                    <!-- Legend -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" 
+                                HorizontalAlignment="Left" Margin="16">
+                        <Border Background="#DBEAFE" CornerRadius="4" Padding="8,4" Margin="0,0,8,0">
+                            <TextBlock Text="Montant" FontSize="11" Foreground="#1E40AF"/>
+                        </Border>
+                        <Border Background="#DCFCE7" CornerRadius="4" Padding="8,4" Margin="0,0,8,0">
+                            <TextBlock Text="Montant en lettres" FontSize="11" Foreground="#166534"/>
+                        </Border>
+                        <Border Background="#F3E8FF" CornerRadius="4" Padding="8,4" Margin="0,0,8,0">
+                            <TextBlock Text="Bénéficiaire" FontSize="11" Foreground="#7E22CE"/>
+                        </Border>
+                        <Border Background="#FEF3C7" CornerRadius="4" Padding="8,4" Margin="0,0,8,0">
+                            <TextBlock Text="Lieu" FontSize="11" Foreground="#92400E"/>
+                        </Border>
+                        <Border Background="#FEE2E2" CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="Date" FontSize="11" Foreground="#991B1B"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Properties Panel -->
+        <Border Grid.Column="1" Background="White" 
+                BorderBrush="#E2E8F0" BorderThickness="1,0,0,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Propriétés" FontSize="16" FontWeight="Bold" 
+                               Foreground="#0F172A" Margin="0,0,0,20"/>
+
+                    <!-- Global Offset -->
+                    <Border Background="#F1F5F9" CornerRadius="8" Padding="16" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="DÉCALAGE GLOBAL" FontSize="11" FontWeight="Bold"
+                                       Foreground="#64748B" Margin="0,0,0,12"/>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="X (mm)" Style="{StaticResource PropLabel}"/>
+                                    <TextBox x:Name="GlobalOffsetXBox" Style="{StaticResource PropTextBox}"
+                                             Text="{Binding GlobalOffsetX, StringFormat=F1, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Y (mm)" Style="{StaticResource PropLabel}"/>
+                                    <TextBox x:Name="GlobalOffsetYBox" Style="{StaticResource PropTextBox}"
+                                             Text="{Binding GlobalOffsetY, StringFormat=F1, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Selected Field Properties -->
+                    <Border Background="#F1F5F9" CornerRadius="8" Padding="16" Margin="0,0,0,20"
+                            Visibility="{Binding HasSelection, Converter={StaticResource BoolToVisConverter}, FallbackValue=Collapsed}">
+                        <StackPanel>
+                            <TextBlock Text="CHAMP SÉLECTIONNÉ" FontSize="11" FontWeight="Bold"
+                                       Foreground="#64748B" Margin="0,0,0,4"/>
+                            <TextBlock Text="{Binding SelectedFieldId}" FontSize="14" FontWeight="SemiBold"
+                                       Foreground="#0F172A" Margin="0,0,0,16"/>
+
+                            <!-- Position -->
+                            <TextBlock Text="Position" Style="{StaticResource PropLabel}" Margin="0,0,0,8"/>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="X (mm)" Style="{StaticResource PropLabel}"/>
+                                    <TextBox Style="{StaticResource PropTextBox}"
+                                             Text="{Binding SelectedX, StringFormat=F1, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Y (mm)" Style="{StaticResource PropLabel}"/>
+                                    <TextBox Style="{StaticResource PropTextBox}"
+                                             Text="{Binding SelectedY, StringFormat=F1, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Size -->
+                            <TextBlock Text="Taille" Style="{StaticResource PropLabel}" Margin="0,0,0,8"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Largeur (mm)" Style="{StaticResource PropLabel}"/>
+                                    <TextBox Style="{StaticResource PropTextBox}"
+                                             Text="{Binding SelectedWidth, StringFormat=F1, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Hauteur (mm)" Style="{StaticResource PropLabel}"/>
+                                    <TextBox Style="{StaticResource PropTextBox}"
+                                             Text="{Binding SelectedHeight, StringFormat=F1, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- No Selection Message -->
+                    <Border Background="#FEF3C7" CornerRadius="8" Padding="16" Margin="0,0,0,20"
+                            Visibility="{Binding HasSelection, Converter={StaticResource InverseBoolToVisConverter}, FallbackValue=Visible}">
+                        <TextBlock TextWrapping="Wrap" FontSize="13" Foreground="#92400E">
+                            💡 Cliquez sur un champ dans le canvas pour le sélectionner et modifier ses propriétés.
+                        </TextBlock>
+                    </Border>
+
+                    <!-- Action Buttons -->
+                    <Button Content="💾 Enregistrer le Modèle"
+                            Style="{StaticResource PrimaryBtn}"
+                            Command="{Binding SaveCommand}"
+                            Margin="0,0,0,10"/>
+
+                    <Button Content="🔄 Réinitialiser"
+                            Style="{StaticResource SecondaryBtn}"
+                            Command="{Binding ResetCommand}"
+                            Margin="0,0,0,10"/>
+
+                    <Button x:Name="CloseButton" Content="✖ Fermer"
+                            Style="{StaticResource SecondaryBtn}"
+                            Click="OnCloseClick"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Window>

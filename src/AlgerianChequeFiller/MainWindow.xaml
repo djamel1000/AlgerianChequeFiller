@@ -90,13 +90,19 @@
 
                     <Button Content="🎯 Test d'Alignement"
                             Style="{StaticResource SecondaryButton}"
-                            Command="{Binding TestPrintCommand}"/>
+                            Command="{Binding TestPrintCommand}"
+                            Margin="0,0,0,12"/>
+
+                    <Button x:Name="TemplateEditorButton" 
+                            Content="📐 Éditeur de Modèle"
+                            Style="{StaticResource SecondaryButton}"
+                            Click="OnOpenTemplateEditor"/>
 
                     <!-- Help Text -->
                     <Border Background="#EFF6FF" CornerRadius="8" Padding="12" Margin="0,24,0,0">
                         <TextBlock TextWrapping="Wrap" FontSize="12" LineHeight="18"
                                    Foreground="#1E40AF">
-                            💡 <Run FontWeight="SemiBold">Conseil:</Run> Utilisez d'abord le test d'alignement sur une feuille blanche pour vérifier le positionnement avant d'imprimer sur un vrai chèque.
+                            💡 <Run FontWeight="SemiBold">Conseil:</Run> Utilisez l'éditeur de modèle pour ajuster la position des champs sur votre chèque.
                         </TextBlock>
                     </Border>
                 </StackPanel>
