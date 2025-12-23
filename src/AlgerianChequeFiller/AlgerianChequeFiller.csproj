@@ -15,10 +15,12 @@
 
   <ItemGroup>
     <None Remove="Resources\default_template.json" />
+    <None Remove="Resources\cheque_background.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_template.json" />
+    <Resource Include="Resources\cheque_background.png" />
   </ItemGroup>
 
 </Project>

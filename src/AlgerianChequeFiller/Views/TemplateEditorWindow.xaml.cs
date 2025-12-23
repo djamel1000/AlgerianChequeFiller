@@ -67,16 +67,33 @@ public partial class TemplateEditorWindow : Window
         TemplateCanvas.Width = chequeWidth;
         TemplateCanvas.Height = chequeHeight;
 
-        var outline = new Rectangle
+        // Add cheque background image
+        try
         {
-            Width = chequeWidth,
-            Height = chequeHeight,
-            Stroke = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
-            StrokeThickness = 2,
-            StrokeDashArray = new DoubleCollection { 5, 3 },
-            Fill = Brushes.White
-        };
-        TemplateCanvas.Children.Add(outline);
+            var backgroundImage = new System.Windows.Controls.Image
+            {
+                Width = chequeWidth,
+                Height = chequeHeight,
+                Source = new System.Windows.Media.Imaging.BitmapImage(
+                    new Uri("pack://application:,,,/Resources/cheque_background.png")),
+                Stretch = Stretch.Fill
+            };
+            TemplateCanvas.Children.Add(backgroundImage);
+        }
+        catch
+        {
+            // Fallback to white rectangle if image fails to load
+            var outline = new Rectangle
+            {
+                Width = chequeWidth,
+                Height = chequeHeight,
+                Stroke = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+                StrokeThickness = 2,
+                StrokeDashArray = new DoubleCollection { 5, 3 },
+                Fill = Brushes.White
+            };
+            TemplateCanvas.Children.Add(outline);
+        }
 
         // Draw field rectangles
         foreach (var (fieldId, fieldRect) in _viewModel.Template.Fields)
