@@ -129,7 +129,6 @@ public partial class TemplateEditorWindow : Window
             VerticalAlignment = VerticalAlignment.Center,
             TextTrimming = TextTrimming.CharacterEllipsis
         };
-        border.Child = label;
 
         // Add resize handle
         var resizeHandle = new Rectangle
@@ -144,6 +143,7 @@ public partial class TemplateEditorWindow : Window
             Tag = "resize"
         };
 
+        // Create grid to hold both label and resize handle
         var grid = new Grid();
         grid.Children.Add(label);
         grid.Children.Add(resizeHandle);
