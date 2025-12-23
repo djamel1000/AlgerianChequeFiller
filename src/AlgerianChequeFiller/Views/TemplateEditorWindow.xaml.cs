@@ -130,16 +130,18 @@ public partial class TemplateEditorWindow : Window
             TextTrimming = TextTrimming.CharacterEllipsis
         };
 
-        // Add resize handle
+        // Add resize handle (larger, more visible)
         var resizeHandle = new Rectangle
         {
-            Width = 10,
-            Height = 10,
+            Width = 14,
+            Height = 14,
             Fill = new SolidColorBrush(color),
+            Stroke = Brushes.White,
+            StrokeThickness = 2,
             Cursor = Cursors.SizeNWSE,
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Bottom,
-            Margin = new Thickness(0, 0, -2, -2),
+            Margin = new Thickness(0, 0, 2, 2),
             Tag = "resize"
         };
 
