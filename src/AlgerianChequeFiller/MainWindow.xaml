@@ -136,14 +136,15 @@
             <Border Grid.Row="1" Margin="32">
                 <Border Style="{StaticResource Card}">
                     <Viewbox Stretch="Uniform" MaxWidth="800">
-                        <!-- Cheque Preview with Background -->
-                        <Grid Width="604" Height="302">
+                        <!-- Cheque Preview with Background (180mm × 80mm at 3.78 scale) -->
+                        <Grid Width="680" Height="302">
                             <!-- Background Image -->
                             <Image x:Name="PreviewBackground"
                                    Source="Resources/cheque_background.png"
                                    Stretch="Fill"/>
                             <!-- Data Overlay -->
                             <Image Source="{Binding PreviewImage}"
+                                   Stretch="Fill"
                                    RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Grid>
                     </Viewbox>

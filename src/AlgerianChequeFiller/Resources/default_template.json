@@ -2,7 +2,7 @@
   "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
   "templateName": "Algerian Cheque – Default",
   "chequeSizeMm": {
-    "width": 160.0,
+    "width": 180.0,
     "height": 80.0
   },
   "globalOffsetMm": {
